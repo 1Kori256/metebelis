@@ -1,0 +1,60 @@
+[tool.poetry]
+name = "metebelis"
+version = "0.0.0"
+description = "TBD"
+authors = ["Samuel Koribanič <korisamo123@gmail.com>"]
+packages = [
+    {include="metebelis", from="src"}
+]
+include = ["py.typed"]
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pygame = "^2.5.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+pytest-cov = "^4.0.0"
+pytest-black-ng = "^0.4.1"
+pytest-mypy = "^0.10.3"
+pytest-ruff = "^0.0.6"
+poethepoet = "^0.18.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+metebelis = "metebelis.__main__:main"
+
+[tool.pytest.ini_options]
+addopts = """
+    --verbose
+    --cov=metebelis --cov-report html
+    --black
+    --mypy
+    --ruff
+    """
+
+[tool.poe.tasks]
+_black = "black ."
+_ruff_sort_imports = "ruff check . --fix --select I001"
+_ruf_fix_all = "ruff check . --fix"
+format = ["_black", "_ruff_sort_imports"]
+fix = ["_black", "_ruff_fix_all"]
+
+[tool.black]
+line-length = 99
+
+[tool.mypy]
+strict = true
+mypy_path = "src"
+
+[tool.ruff]
+line-length = 120
+src = ["src"]
+select = ["E", "F", "I", "ARG"]
